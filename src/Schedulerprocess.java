@@ -22,5 +22,3 @@ public enum Schedulerprocess {//scheduling enum tried with mapping but more stab
 
    }
 }//end enum class
-   
-   

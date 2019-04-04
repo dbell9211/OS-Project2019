@@ -4,16 +4,18 @@ public class CPU {
 	public int reg1, reg2, sReg1, sReg2, dReg, bReg;
 	public int addr; // Current address
 	public int jc; // Job Counter
-	public String cache[];
+	public String cache[]; // Acquired from Memory Module
 	public int pc; // Program Counter
-	public Register currentRegisters; // called from helper class that is used to execute registers 
+	public Register currentRegisters; // called from helper class that is used to execute registers
+	public Register accumlator;
 	public PCB currentPCB; // called from pcb class to get information on process
-	public String InputBuffer, OutputBuffer, TempBuffer; // (Not implemented), used for first 2 OpCodes
+	public String inputBuffer, outputBuffer, tempBuffer; // (Not implemented), used for first 2 OpCodes
+	// TODO: metrics
 	
 	// Constructor
 	public CPU(PCB pcb) {
 		// setCache(cache);
-		pc = pcb.getPC(); // Get current PC from PCB
+		// pc = pcb.getPC(); // Get current PC from PCB
 		// Maybe other initialization here? 
 	}
 	
@@ -71,10 +73,12 @@ public class CPU {
 		// OpCode {00} - Read Content of I/P buffer into a accumlator
 		case 0:
 			System.out.println("Executing Read OpCode");
+			accumlator.readBuffer(inputBuffer, addr);
 			// TODO
 		// OpCode {01} - Writes the content of accumulator into O/P buffer
 		case 1: 
 			System.out.println("**Executing Write OpCode");
+			outputBuffer = accumlator.writeBuffer(outputBuffer, addr);
 			// TODO
 		// OpCode {02} - Stores content of a reg. into an address
 		case 2: 
@@ -261,5 +265,4 @@ public class CPU {
 	public void setCache(String [] cache_) {
 		cache = cache_;
 	}
-	
 }

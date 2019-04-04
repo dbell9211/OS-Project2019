@@ -4,16 +4,16 @@ import java.io.*;
 //import packagename pcb. ; 
 
 public class Scheduler {
-   public LinkedList<pcb> readyqueue;//ready queue for the pcb.
+   public LinkedList<PCB> readyqueue;//ready queue for the pcb.
    public pcb.SORT_PROCESS sortprocess;
    
    public Scheduler() {
       readyqueue = new LinkList<pcb>();
    }
    
-   @Override 
+   //@Override 
    public void run () { //looks through the pcb and adds the jobs to the readyqueue
-      for(pcb pcb : pcb.taskmanager) {
+      for(PCB pcb : pcb.taskmanager) {
          if (pcb.status() == pcb.status.terminated && RAM.processMapped(pcb)) {
             try { 
                for(int x = 0; x < pcb.getjoblist.size(); x++) {

@@ -5,7 +5,7 @@
 //import packagename Driver.
 import java.util.*;
 
-public class Dispatcher_2 {
+public class Dispatcher {
    private int CPU[];
    private int cpus[]; 
    

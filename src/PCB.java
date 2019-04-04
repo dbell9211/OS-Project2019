@@ -11,7 +11,6 @@ public class PCB
    {
       RUNNING, READY, WAITING
    }
-  
 
    //Setters and getters
    public void setJobID(int jobID)
