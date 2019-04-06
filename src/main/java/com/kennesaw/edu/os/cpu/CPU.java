@@ -24,6 +24,10 @@ public class CPU implements ICPU {
 	// Which job is assigned to which CPU 
 	// TODO - Table
 	
+	public CPU() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	// Constructor
 	public CPU(PCB pcb) {
 		this.numberOfCPUs = 1; // For one CPU
@@ -54,6 +58,7 @@ public class CPU implements ICPU {
 	
 	// ------------- Main CPU Functions ----------------------
 	
+
 	// Called to fetch instruction
 	public String fetch(int pc) {
 		// Get current instruction from cache using program counter

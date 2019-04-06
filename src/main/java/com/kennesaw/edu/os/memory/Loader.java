@@ -1,7 +1,9 @@
 package com.kennesaw.edu.os.memory;
-import java.util.*;
-import java.lang.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Scanner;
 
 class Loader
 {
