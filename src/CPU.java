@@ -1,28 +1,61 @@
 // CPU Class
 public class CPU {
 	// Global Variables 
-	public int reg1, reg2, sReg1, sReg2, dReg, bReg;
+	public int reg1, reg2, sReg1, sReg2, dReg, bReg; // Registers
 	public int addr; // Current address
-	public int jc; // Job Counter
+	public int numberOfCPUs;
+	public int jc, pc; // Job Counter & Program Counter
+	public int cpuID, jobID = 0; // CPUid - Used for multipleCPUs
 	public String cache[]; // Acquired from Memory Module
-	public int pc; // Program Counter
-	public Register currentRegisters; // called from helper class that is used to execute registers
-	public Register accumlator;
-	public PCB currentPCB; // called from pcb class to get information on process
-	public String inputBuffer, outputBuffer, tempBuffer; // (Not implemented), used for first 2 OpCodes
-	// TODO: metrics
+	public double cacheUsed;
+	public Register currentRegisters; // called from helper class 'Register'
+	public Register accumlator; // Called from helper class 'Register'
+	public PCB currentPCB; // Called from pcb class to get information on process
+	public Scheduler scheduler; // Called from scheduler class
+	public String inputBuffer, outputBuffer, tempBuffer; // Buffers
+	public int numIOOperations, numOfJobs; // Metrics
+	// WaitTime and CompletionTime -> Done by scheduler 
+	// Per each job --> Name and Number of Input/Outputs 
+	// Which job is assigned to which CPU 
+	// TODO - Table
 	
 	// Constructor
 	public CPU(PCB pcb) {
-		// setCache(cache);
-		// pc = pcb.getPC(); // Get current PC from PCB
-		// Maybe other initialization here? 
+		this.numberOfCPUs = 1; // For one CPU
+		this.currentPCB = pcb;
+		this.pc = currentPCB.getPC(); // Get program counter from PCB
+		this.cpuID = cpuID + 1; // Increment current CPUid
+		this.jobID = pcb.getJobID(); // Get current jobID from PCB
+		this.cacheUsed = 0.0;
+		this.fillCache(); // Gives value to cache
 	}
+	
+	// MultiCPU Constructor
+	public CPU(int numOfCPUs, PCB pcb) {
+		this.numberOfCPUs = numOfCPUs;
+		this.currentPCB = pcb;
+		this.pc = currentPCB.getPC();
+		this.cpuID = cpuID + 1; 
+		this.jobID = pcb.getJobID();
+		this.cacheUsed = 0.0;
+		// this.fillCache(); Won't work for multiple CPUs
+		// Iterate through number of CPUs
+		
+		/*
+		for (int i = 0; i <= numOfCPUs; i++ ) {
+			CPU cpu = new CPU(pcb);
+		} */
+	}
+	
+	// ------------- Main CPU Functions ----------------------
 	
 	// Called to fetch instruction
 	private String fetch(int pc) {
 		// Get current instruction from cache using program counter
 		String instruct = cache[pc];
+		// TODO: Job name and percent of cache used
+		String jobName = currentPCB.getJobName(); // From PCB Class
+		cacheUsed = cacheUsed(cache);
 		jc++; // increment amount of jobs available
 		return instruct;
 	}
@@ -57,6 +90,7 @@ public class CPU {
 			reg1 = binaryStringToInteger(tmpInstr.substring(8,12));
 			reg2 = binaryStringToInteger(tmpInstr.substring(12,16));
 			addr = binaryStringToInteger(tmpInstr.substring(16));
+			numIOOperations++; // Increment total I/O Operations
 			break;
 		// No valid instruction type given or never assigned
 		default:
@@ -74,12 +108,10 @@ public class CPU {
 		case 0:
 			System.out.println("Executing Read OpCode");
 			accumlator.readBuffer(inputBuffer, addr);
-			// TODO
 		// OpCode {01} - Writes the content of accumulator into O/P buffer
 		case 1: 
 			System.out.println("**Executing Write OpCode");
 			outputBuffer = accumlator.writeBuffer(outputBuffer, addr);
-			// TODO
 		// OpCode {02} - Stores content of a reg. into an address
 		case 2: 
 			addr = currentRegisters.getReg(dReg);
@@ -234,6 +266,7 @@ public class CPU {
 	// Runs all commands while pc < jc
 	public void run() {
 		// Job Available
+		// While process is ready
 		while (pc < jc) {
 			try {
 				execute(decode(fetch(pc)));
@@ -243,26 +276,80 @@ public class CPU {
 		}
 	}
 	
+	// ------------- Helper Functions -------------------------
+	
 	// Function to change the string of hex to string of binary
-	public String hexToBinary(String hex) {
-		int temp = Integer.parseInt(hex, 16); // Convert hex string to decimal value
+	public String hexToBinary(String hexString) {
+		int temp = Integer.parseInt(hexString, 16); // Convert hex string to decimal value
 		String binStr = Integer.toBinaryString(temp); // Convert int temp to a binary string
 		return binStr;
 	}
 	
 	// Function to change the string of binary to integer
-	public int binaryStringToInteger(String nbinStr) {
-		int nInt = Integer.parseInt(nbinStr, 2); // Change binary string to int value
+	public int binaryStringToInteger(String binStr) {
+		int nInt = Integer.parseInt(binStr, 2); // Change binary string to int value
 		return nInt;
 	}
 	
-	// Getter for cache
+	// Assigns value to cache given PC
+	public void fillCache() {
+		cache[addr] = String.valueOf(pc); // Sets cache = value of PC
+	}
+	
+	// ------------- Getters & Setters ------------------------
+	
+	// Returns current cache array
 	public String[] getCache() {
 		return cache;
 	}
 	
-	// Setter for cache
+	// Assigns the parameter cache to CPUs cache
 	public void setCache(String [] cache_) {
 		cache = cache_;
 	}
+	
+	// Returns the ID of the current job
+	public int getJobID() {
+		return jobID;
+	}
+	
+	// Returns the ID of the current CPU(Multi-CPUs)
+	public int getCpuID() {
+		return cpuID;
+	}
+	
+	// --------------- Metrics --------------------------------
+	
+	// Returns number of jobs/tasks
+	public int numOfJobs() {
+		return numOfJobs;
+	}
+	
+	// Returns total number of I/O Operations
+	public int numberOfIOOperations() {
+		return numIOOperations;
+	}
+	
+	// Returns percentage of cache used
+	public double cacheUsed(String [] cache) {
+		double percentOfCache = 0.0;
+		percentOfCache = cache.length / 1024; // Divide by initial value
+		return percentOfCache * 100; // Return percentage
+	}
+	
+	// Format and Print Metrics
+	public void printMetrics() {
+		System.out.println("--------------------------\n");
+		System.out.println("JobID: " + jobID);
+		System.out.println("CPUID: " + cpuID);
+		System.out.println("Cache Used: " + cacheUsed + "%");
+		System.out.println("Number of I/O Operations: " + numIOOperations);
+		System.out.println("Number of total jobs: " + numOfJobs);
+		System.out.println("Total Waiting Time: " + scheduler.getWaitTime()); // From Scheduler Class
+		System.out.println("Total Completion Time: " + scheduler.getCompleteTime()); // From Scheduler Class
+		System.out.println("--------------------------\n");
+	}
+	
+	// Percent of cache used -- Depending on each application 
+	// Table --> Output (CPU) TODO
 }

@@ -13,7 +13,7 @@ public enum Schedulerprocess {//scheduling enum tried with mapping but more stab
    }
    
    static Schedulerprocess policycheck(int policy) {
-      for (Schedulerprocess type: Schedulerprocess.processes()) {
+      for (Schedulerprocess type: Schedulerprocess.policy()) {
             if (type.procedure() == policy) {
                 return type;
             }

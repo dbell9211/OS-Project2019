@@ -9,7 +9,7 @@ public class Dispatcher {
    private int CPU[];
    private int cpus[]; 
    
-   Dispatcher_2 (int CPU []) {
+   Dispatcher (int CPU []) {
       this.cpus = cpus;
    }
    
