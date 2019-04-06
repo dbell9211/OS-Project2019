@@ -1,6 +1,4 @@
 package com.kennesaw.edu.os.memory;
-import java.util.*;
-import java.io.*;
 
 class Disk
 {
