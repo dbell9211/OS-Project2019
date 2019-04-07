@@ -1,59 +1,57 @@
-package com.kennesaw.edu.os;
-import com.kennesaw.edu.os.cpu.CPU;
-import com.kennesaw.edu.os.cpu.ICPU;
-import com.kennesaw.edu.os.cpu.Register;
-import com.kennesaw.edu.os.dispatcher.Dispatcher;
-import com.kennesaw.edu.os.memory.Memory;
-import com.kennesaw.edu.os.memory.PCB;
-import com.kennesaw.edu.os.scheduler.Scheduler;
+import java.io.*;
+import java.util.*;
  
 
 public class Driver {
    
    //instance variables
-   // private ICPU[] cpu;
+   private CPU[] cpus;
    private Thread[] threads; //simulated threads
    private Scheduler scheduler;
-   private Dispatcher dispatcher = new Dispatcher();
+   private Dispatcher dispatcher;
    private Memory disk;
-   private Register register = new Register();
-
+   private SchedulerProcess schedulerprocess;
+   private static Loader loader;
    
-   this.threads = new threads[this.cpu.length]
-   
-   ICPU cpu = new CPU();
-   
-   
-   scheduler = new Scheduler();
-   this.Schedulerprocess = new Schedulerprocess;
-   
-   public Driver() {
+   public Driver(int disk, int RAMsize, int registers, int cache) {
+      
       this.disk = disk;
       this.RAMsize = RAMsize;
       this.registers = registers; 
       this.cache = cache;
       
+      this.dispatcher = new Dispatcher();
+      this.register = new Register();
+      this.scheduler = new Scheduler();
+      this.schedulerprocess = new Schedulerprocess();
+      this.loader = new Loader();
+
+
+   
+      this.threads = new Thread[this.cpu.length];
+   
+      for (int x = 0; x < this.cpus.length; x++ ) {
+			CPU cpu = new CPU(x);
+			this.cpus[x] = cpu;
+			this.threads[x] = new Thread( this.cpus[x] );
+         cpu.printDump();
+      }
    }
    
    public void run() {//for thread array.
       for(int e = 0; e < cpu.length(); e++) {
          this.threads[e].start();
       }
-   }//end run method for # of threads. 
-   
-   public static void Main(String []args) {
-   
-   if(loader() == null) {
-      loader( programfile, disk );
-      while(loader != null) {
-         this.scheduler.run();
-         this.dispatcher.run();
+      if (loader() == null) {
+         loader(programfile.txt, disk);
+         while(loader != null) {
+            this.scheduler.run();
+            this.dispatcher.run();
          
-         
-         jobcompleted = true;
-         if(PCB.getStatus != PCB.Status.Terminated) {
-            jobcompleed = false;
-         }
+            boolean jobcompleted = true;
+            if(PCB.getStatus != PCB.Status.Terminated) {
+               jobcompleted = false;
+            }
             
          boolean notalive = true;
          for (Thread thread : this.threads) {
@@ -76,7 +74,7 @@ public class Driver {
 
 		boolean allJoined;
 
-		/*
+		
       do {
 			for ( int f = 0; f < this.cpu.length; f++ ) {
 				synchronized (this.cpu[f]) {
@@ -86,32 +84,40 @@ public class Driver {
 					joined[f] = true;
 				}
 			}
+
 			allJoined = true;
+
 			for ( boolean aJoined : joined ) {
 				if ( !aJoined ) {
 					allJoined = false;
 					break;
 				}
 			}
-		} while (!allJoined);   
-    */     
+		} while (!allJoined);        
    }
    
       }
-   
+  }
+  
+   public static void reset() {
+      loader = null;
+   }
+ 
+   public static void Main(String []args) {
+      int[] cpuset = { 1 };
+      for (SchedulingPolicy policy : SchedulingPolicy.values()) {
+			for ( int numCPUs : cpuSet ) {
+				Driver.reset();
+			}
+		}
    }// end main method
    
    public void dump() {
-      System.out.println("Disk size: " + disksize +  "RAM usage: " + RAMsize );
-      
-    for (CPU cpu : this.cpu) {
-      System.out.println( "CPU " + cpu.getCPUID() );
-		cpu.printDump();
-		System.out.println();
-    }  
-      
-      
-    
-      
+      System.out.println("Disk size: " + disk +  "RAM usage: " + RAMsize );
+      for (CPU cpu : this.cpu) {
+        System.out.println( "CPU " + PCB.getCPUID() );
+		   cpu.printDump();
+		   System.out.println();
+      }  
    }
 }//end driver class
