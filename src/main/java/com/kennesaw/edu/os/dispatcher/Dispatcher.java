@@ -1,37 +1,32 @@
-package com.kennesaw.edu.os.dispatcher;
-import com.kennesaw.edu.os.Driver;
-import com.kennesaw.edu.os.cpu.CPU;
+import java.util.*;
 
-public class Dispatcher {
-	private int CPU[]; 
-	private int cpus[]; // why 2 ???? 
-
-	public Dispatcher() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public Dispatcher (int CPU []) {
-		this.cpus = cpus;
-	}
-
-	public void dispatch() {//dispatcher sets the cpu process and then loads in the pcb through context switching. 
-		for (CPU cpu : this.cpus) {
-			if ((cpu.getJob() == null || pcb.Status.RUNNING != cpu.getJob().getStatus())) {
-
-				pcb.next();
-				next = scheduler.getReadyQueue().remove();
-				cpu.setProcess(next);
-				RAM cache = cpu.getCache();
-				for (int r = 0; r < next.getTotalSize() && r < cache.getCapacity(); r++ ) {
-					cache.write(r, RAM.read(next, r));
-					Driver.CPU[r].load(pcb);
-				}
-			}
-		}
-	}//end method
-	
-	
-	public void setCpus(int[] cpus) {
-		this.cpus = cpus;
-	}
+public class Dispatcher implements Runnable {
+   private CPU[] cpus; 
+   private PCB pcb;
+   private String Status;
+   private Disk disk;
+   
+   
+   Dispatcher (CPU [] cpus, PCB pcb, String Status, Disk disk) {
+      this.cpus = cpus;
+      this.pcb = pcb;
+      this.Status = Status;
+      this.disk = disk;
+   }
+   
+   public void run() {//dispatcher sets the cpu process and then loads in the pcb through context switching. 
+    for (CPU cpu : this.cpus) {
+		if ((pcb.getcpuID() > 0) || (!pcb.Status.RUNNING)) {
+				//pcb next;
+				//next = Scheduler.getReadyQueue().remove(); may use for later.
+				if ((pcb.getcpuID() > 0) || (!pcb.Status.RUNNING)) {
+				//Disk cache = cpu.getCache();//Is Cache located in the memory or the scheduler?
+				//for (int r = 0; r < next.getTotalSize() && r < cache.getCapacity(); r++ ) {
+					//cache.write(r, Disk.read(next, r));
+				Driver.CPU[r].load(pcb);
+            }
+         }
+   }
+  }//end method
+  
 }//end class
