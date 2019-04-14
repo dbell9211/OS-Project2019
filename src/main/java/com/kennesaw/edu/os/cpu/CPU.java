@@ -30,14 +30,14 @@ public class CPU implements ICPU {
 	
 	// Default Constructor
 	public CPU(int cpuID) {
-		//this.currentPCB = currentPCB.getPCB(); // Maybe given a specific processID
+		//this.currentPCB = currentPCB.getPCB(); // Maybe given a specific processID as a parameter
 		//this.numberOfCPUs = driver.getNumOfCPUS(); // Needs to be added to driver module
 		this.pc = this.currentPCB.getPC(); 
 		this.cpuID = cpuID;
 		//this.jobID = this.currentPCB.getJobID();
-		this.cacheUsed = 0.0; // Initialize cache to 0.0 (double)
+		this.cacheUsed = 0.0; // Initialize cache to 0.0
 		this.fillCache(); // Sets initial value of cache
-		this.statusOfCPU = CPUStatus.WAITING;
+		this.statusOfCPU = CPUStatus.WAITING; // Initial status to CPU object
 	}
 	
 	/* 
@@ -52,6 +52,7 @@ public class CPU implements ICPU {
 		this.fillCache(); // Gives value to cache
 		this.statusOfCPU = CPUStatus.WAITING;
 	} */
+	
 	// ------------- Main CPU Functions ----------------------
 
 	// Called to fetch instruction
@@ -277,6 +278,7 @@ public class CPU implements ICPU {
 				execute(decode(fetch(pc)));
 				// Once completed set to status and wait for another process
 				this.statusOfCPU = CPUStatus.WAITING;
+				// update process of process?
 			} catch (Exception e) {
 				// There was an error with try/catch. Update status
 				this.statusOfCPU = CPUStatus.ERROR; 
@@ -306,16 +308,6 @@ public class CPU implements ICPU {
 		cache[addr] = String.valueOf(pc); // Sets cache = value of PC
 	}
 	
-	// Sets a new PCB
-	public void setPCB(PCB pcb) {
-		this.currentPCB = pcb;
-	}
-	
-	// Returns current PCB
-	public PCB getPCB() {
-		return this.currentPCB;
-	}
-	
 	// ------------- Getters & Setters ------------------------
 	
 	// Returns current cache array
@@ -333,9 +325,34 @@ public class CPU implements ICPU {
 		return jobID;
 	}
 	
+	// Sets the job id to CPU
+	public void setJobID(int jobID) {
+		this.jobID = jobID;
+	}
+	
 	// Returns the ID of the current CPU(Multi-CPUs)
 	public int getCpuID() {
 		return cpuID;
+	}
+	
+	// Sets a CPU ID to CPU 
+	public void setCpuID(int cpuID) {
+		this.cpuID = cpuID; 
+	}
+	
+	// Returns current PCB
+	public PCB getPCB() {
+		return this.currentPCB;
+	}
+	
+	// Sets a new PCB
+	public void setPCB(PCB pcb) {
+		this.currentPCB = pcb;
+	}
+	
+	// Returns current cpu status
+	public CPUStatus getCPUStatus() {
+		return this.statusOfCPU;
 	}
 	
 	// --------------- Metrics --------------------------------
@@ -352,7 +369,7 @@ public class CPU implements ICPU {
 	
 	// Returns percentage of cache used
 	public double cacheUsed(String [] cache) {
-		double percentOfCache = 0.0;
+		double percentOfCache = 0.0; // Initialize
 		percentOfCache = cache.length / 1024; // Divide by initial value
 		return percentOfCache * 100; // Return percentage
 	}
