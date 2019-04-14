@@ -3,8 +3,8 @@ package com.kennesaw.edu.os.cpu;
 // Imports (Packages)
 import com.kennesaw.edu.os.memory.PCB;
 import com.kennesaw.edu.os.scheduler.Scheduler;
-// CPU Class
 
+// CPU Class
 public class CPU implements ICPU {
 	// Global Variables 
 	public int reg1, reg2, sReg1, sReg2, dReg, bReg; // Registers
