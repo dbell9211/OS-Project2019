@@ -10,6 +10,7 @@ import com.kennesaw.edu.os.memory.PCB;
 import com.kennesaw.edu.os.memory.PCB.Status;
 import com.kennesaw.edu.os.scheduler.Scheduler;
 import com.kennesaw.edu.os.scheduler.Schedulerprocess;
+//import com.kennesaw.edu.os.memory.CompileTest;
 
 
 import java.io.*;
@@ -36,6 +37,7 @@ public class Driver {
    public int counter;
    public int priority;
    public int startingAddress;
+   public String inputFile;
    
    ///private String Status;
    
@@ -70,7 +72,7 @@ public class Driver {
       this.dispatcher = new Dispatcher(cpus, memory);
       this.registers = new Register();
       this.scheduler = new Scheduler(memory, disk, pcb, schedulerprocess);
-      this.loader = new Loader();
+      this.loader = new Loader("CompileTest.txt");
       this.pcb = new PCB(cpuID, status, counter, priority, startingAddress);
       
       //loadingfile( new file getLoader().getResource( "Program File.txt"))
@@ -87,14 +89,14 @@ public class Driver {
          //cpu.printDump();
       }
       
-      for(int y = 0; y < this.pcb.counter; y++) {
+      for(int y = 0; y < this.pcb.getPC(); y++) {
          insertpcb(pcb); 
       }
    }
    
    
-   public static void loadingfile(File programFile) {
-      loader = new Loader(programFile);
+   public void loadingfile(String inputfile) {
+      loader = new Loader(inputFile);
    }
    
    public void run() throws InterruptedException  {//for thread array.
@@ -108,7 +110,7 @@ public class Driver {
          
             boolean jobcompleted = true;
             for(PCB pcb: this.pcblist) {
-               if(pcb.status.getStatus_NUM() != 2) {
+               if(pcb.status.getStatus_NUM() != 4) {
                   jobcompleted = false;
                }
             }
@@ -190,3 +192,6 @@ public class Driver {
       pcblist.add(pcb);
    } 
 }//end driver class
+
+  
+
