@@ -93,8 +93,8 @@ public class Driver {
    }
    
    
-   public static void loadingfile(File programfile) {
-      loader = new Loader();
+   public static void loadingfile(File programFile) {
+      loader = new Loader(programFile);
    }
    
    public void run() throws InterruptedException  {//for thread array.
