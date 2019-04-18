@@ -3,7 +3,7 @@ package com.kennesaw.edu.os.memory;
 import java.io.*; 
 public class PCB
 {
-   int cpuID;
+   int processID;
    String Status;
    int counter;
    int priority;
@@ -119,7 +119,19 @@ public class PCB
       this.counter = counter;
       this.priority = priority;
       this.startingAddress = startingAddress;
-
+   }
+   
+   // Called to return current PCB object
+   public PCB getPCB(int processID) {
+      // If object of PCB == parameter
+	   if (this.processID == processID) {
+         // returns current object
+		   return this;
+	   } else {
+         // Output if no process matches
+		   System.out.println("Error getting PCB");
+	   } 
+	   return null; // If PCB doesn't match current processID
    }
 
 }
