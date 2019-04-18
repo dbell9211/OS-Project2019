@@ -3,8 +3,8 @@ package com.kennesaw.edu.os.memory;
 import java.io.*; 
 public class PCB
 {
-   int processID;
-   String Status;
+   int cpuID;
+   //String Status;
    int counter;
    int priority;
    int startingAddress;
@@ -35,7 +35,7 @@ public class PCB
    long endRunningTime = 0;
    long totalRunningTime = 0;
    
-   Status status;
+   public Status status;
    
    
    public void Times() 
@@ -96,7 +96,7 @@ public class PCB
    {
       this.priority = priority;
    }
-   public int gePriority()
+   public int getPriority()
    {
      return this.priority;
    }
@@ -112,27 +112,17 @@ public class PCB
    }
 
 
-   public PCB(int cpuID, String State, int counter, int priority, int startingAddress )
+   public PCB(int cpuID, Status status, int counter, int priority, int startingAddress )
    {
       this.cpuID = cpuID;
-      this.Status = Status;
+      this.status = status;
       this.counter = counter;
       this.priority = priority;
       this.startingAddress = startingAddress;
-   }
-   
-   // Called to return current PCB object
-   public PCB getPCB(int processID) {
-      // If object of PCB == parameter
-	   if (this.processID == processID) {
-         // returns current object
-		   return this;
-	   } else {
-         // Output if no process matches
-		   System.out.println("Error getting PCB");
-	   } 
-	   return null; // If PCB doesn't match current processID
+
    }
 
 }
+
+
 
