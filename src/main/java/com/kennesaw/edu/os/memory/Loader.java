@@ -1,11 +1,12 @@
 package com.kennesaw.edu.os.memory;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
-class Loader
+public class Loader
 {
     public BufferedReader br;
     public boolean endOfFile = false;
@@ -21,10 +22,15 @@ class Loader
     final int DATA_OUTPUT_BUFFER = 3;
     final int DATA_TEMP_BUFFER = 4;
     
-    public static void Loader(String inputFile) throws FileNotFoundException 
+    public Loader(String inputFile)  
     {
+        try 
+        {
         File file = new File(inputFile);
-        Scanner scan = new Scanner(file);
+        Scanner scan = new Scanner("Compiletest.txt");
+        } catch(Exception e) {
+            System.out.print(e);
+        }
     }
     
     public void Run() throws IOException
