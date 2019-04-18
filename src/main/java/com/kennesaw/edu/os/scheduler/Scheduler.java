@@ -11,15 +11,15 @@ import java.util.*;
 public class Scheduler implements Runnable {
 
 	private Memory memory;
-   private Disk disk;
+   	private Disk disk;
 	private PCB pcb;
 	private Schedulerprocess schedulerprocess;
-   public LinkedList<PCB> readyqueue = new LinkedList<PCB>();
+  	 public LinkedList<PCB> readyqueue = new LinkedList<PCB>();
    public LinkedList<PCB> Jobqueue = new LinkedList<PCB>();
    public LinkedList<PCB> pcblist = new LinkedList<PCB>();//temp. a string list might need to change data structure for other variables as well.
    public String Address = " ";
    public String Address2 = " ";
-   int i;
+   int holder;
    
 
 	public Scheduler( Memory memory, Disk disk, PCB pcb, Schedulerprocess schedulerprocess ) {
@@ -44,8 +44,12 @@ public class Scheduler implements Runnable {
 
 		// Find next process
 		if ( pcblist.size() > 0 ) {
-			pcblist.(i) = Jobqueue.get( 0 );//need to change parameters here and also add a loop.
-         i++;
+			for(int i = 0; i < pcblist.size(); i++) {
+            //pcblist.get(i) = Jobqueue.get(0);
+            //Jobqueue.get(0) = pcblist.get(i);
+            holder = pcblist.get(i);
+            Jobqueue.get(0) = holder;
+         }
 			if ( this.schedulerprocess == Schedulerprocess.Priority ) {
 				//Find highest priority process
 				for ( PCB pcb : pcblist ) {
