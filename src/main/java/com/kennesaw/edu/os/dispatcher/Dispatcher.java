@@ -20,9 +20,8 @@ public class Dispatcher implements Runnable {
     for (CPU cpu : this.cpus) {
 		if (cpu.getPCB() == null)  {
 				cpu.getCPUStatus();
-            
-				//if ((cpu.getCpuID() > 0) || (!cpu.CPUStatus.WAITING)) {
-				//Disk cache = cpu.get
+            cpu.run();
+				//Write back something into memory here.
             synchronized (cpu) {
             cpu.notify();
             }
@@ -30,3 +29,4 @@ public class Dispatcher implements Runnable {
     }
    }//end method
 }//end class
+  
